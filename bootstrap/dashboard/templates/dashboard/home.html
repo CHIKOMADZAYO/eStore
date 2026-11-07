@@ -3,43 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Admin Dashboard</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            background: #f4f7fb;
+            background: #f3f6fb;
             color: #1f2937;
         }
 
-        .topbar {
-            background: #0f172a;
-            color: #fff;
-            padding: 14px 30px;
-        }
-
-        .nav {
+        .layout {
             display: flex;
-            gap: 18px;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
+            min-height: 100vh;
         }
 
-        .nav a {
-            color: #e2e8f0;
-            text-decoration: none;
+        .sidebar {
+            width: 260px;
+            background: #111827;
+            color: white;
+            padding: 28px 20px;
+        }
+
+        .brand {
+            font-size: 24px;
             font-weight: bold;
+            margin-bottom: 30px;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px 40px;
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        h1 {
+        .menu a {
+            color: #dbeafe;
+            text-decoration: none;
+            background: rgba(255,255,255,0.04);
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .menu a.active {
+            background: #2563eb;
+        }
+
+        .main {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 24px;
+            background: white;
+            padding: 18px 22px;
+            border-radius: 14px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.04);
+        }
+
+        .topbar h2 {
+            margin: 0;
+        }
+
+        .user-pill {
+            background: #e0f2fe;
+            color: #0f172a;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: bold;
         }
 
         .stats {
@@ -51,28 +90,35 @@
 
         .card {
             background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.04);
         }
 
         .label {
             color: #64748b;
-            font-size: 14px;
-            margin-bottom: 8px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
         .value {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: bold;
         }
 
         .panel {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+            border-radius: 14px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.04);
             padding: 20px;
             margin-bottom: 30px;
+        }
+
+        .panel h3 {
+            margin-top: 0;
+            margin-bottom: 18px;
         }
 
         .chart {
@@ -121,6 +167,20 @@
             color: #475569;
         }
 
+        .progress-wrap {
+            margin-top: 18px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            height: 14px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            border-radius: 999px;
+        }
+
         .status {
             display: inline-block;
             padding: 6px 10px;
@@ -129,133 +189,195 @@
             font-weight: bold;
         }
 
-        .success {
-            background: #dcfce7;
-            color: #166534;
-        }
+        .success { background: #dcfce7; color: #166534; }
+        .pending { background: #fef3c7; color: #92400e; }
+        .failed { background: #fee2e2; color: #991b1b; }
+        .info { background: #dbeafe; color: #1d4ed8; }
+        .warning { background: #fef3c7; color: #b45309; }
+        .danger { background: #fee2e2; color: #b91c1c; }
 
-        .pending {
-            background: #fef3c7;
-            color: #92400e;
-        }
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+            }
 
-        .failed {
-            background: #fee2e2;
-            color: #991b1b;
+            .sidebar {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="topbar">
-        <div class="nav">
-            <a href="/">Ecommerce</a>
-            <a href="/payment/">Payment</a>
-            <a href="/dashboard/">Dashboard</a>
-        </div>
-    </div>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">WILLIAM</div>
+            <nav class="menu">
+                <a href="/dashboard/" class="active">Overview</a>
+                <a href="/">Ecommerce</a>
+                <a href="/payment/">Payment</a>
+                <a href="/dashboard/">Transactions</a>
+                <a href="/dashboard/">Reports</a>
+            </nav>
+        </aside>
 
-    <div class="container">
-        <h1>Business Dashboard</h1>
-
-        <div class="stats">
-            <div class="card">
-                <div class="label">Total Revenue</div>
-                <div class="value">KSh {{ total_revenue|floatformat:2 }}</div>
+        <main class="main">
+            <div class="topbar">
+                <h2>Business Dashboard</h2>
+                <div class="user-pill">Admin</div>
             </div>
 
-            <div class="card">
-                <div class="label">Total Transactions</div>
-                <div class="value">{{ total_transactions }}</div>
+            <div class="stats">
+                <div class="card">
+                    <div class="label">Total Revenue</div>
+                    <div class="value">KSh {{ total_revenue|floatformat:2 }}</div>
+                </div>
+
+                <div class="card">
+                    <div class="label">Total Transactions</div>
+                    <div class="value">{{ total_transactions }}</div>
+                </div>
+
+                <div class="card">
+                    <div class="label">Successful</div>
+                    <div class="value">{{ successful_transactions }}</div>
+                </div>
+
+                <div class="card">
+                    <div class="label">Pending</div>
+                    <div class="value">{{ pending_transactions }}</div>
+                </div>
             </div>
 
-            <div class="card">
-                <div class="label">Successful</div>
-                <div class="value">{{ successful_transactions }}</div>
+            <div class="panel">
+                <h3>Sales Chart</h3>
+                <div class="chart">
+                    {% for item in monthly_sales %}
+                        <div class="bar-group">
+                            <div class="bar" style="height: {{ item.height|default:0 }}%;"></div>
+                            <div class="month">{{ item.label }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
 
-            <div class="card">
-                <div class="label">Pending</div>
-                <div class="value">{{ pending_transactions }}</div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <h2>Sales Chart</h2>
-            <div class="chart">
-                {% for item in monthly_sales %}
-                    <div class="bar-group">
-                        <div class="bar" style="height: {{ item.height|default:0 }}%;"></div>
-                        <div class="month">{{ item.label }}</div>
+            <div class="panel">
+                <h3>Revenue vs Target</h3>
+                <div style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:16px;">
+                    <div>
+                        <div class="label" style="margin-bottom:6px;">Actual Revenue</div>
+                        <div class="value" style="font-size:24px;">KSh {{ order_revenue|floatformat:2 }}</div>
                     </div>
-                {% endfor %}
+                    <div>
+                        <div class="label" style="margin-bottom:6px;">Target</div>
+                        <div class="value" style="font-size:24px;">KSh {{ target_revenue|floatformat:2 }}</div>
+                    </div>
+                </div>
+                <div class="progress-wrap">
+                    <div class="progress-bar" style="width: {{ target_progress }}%;"></div>
+                </div>
+                <p style="margin-top:12px; margin-bottom:0; color:#475569;">{{ target_progress|floatformat:0 }}% of target reached</p>
             </div>
-        </div>
 
-        <div class="panel">
-            <h2>Recent M-Pesa Transactions</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Phone</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for transaction in recent_transactions %}
-                        <tr>
-                            <td>{{ transaction.phone_number }}</td>
-                            <td>KSh {{ transaction.amount }}</td>
-                            <td>
-                                {% if transaction.status == 'success' %}
-                                    <span class="status success">Success</span>
-                                {% elif transaction.status == 'pending' %}
-                                    <span class="status pending">Pending</span>
-                                {% else %}
-                                    <span class="status failed">Failed</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ transaction.created_at|date:"Y-m-d H:i" }}</td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="4">No transactions yet.</td>
-                        </tr>
+            {% if alerts %}
+                <div class="panel">
+                    <h3>Alerts</h3>
+                    {% for alert in alerts %}
+                        <div class="status {{ alert.level }}" style="margin-bottom: 8px;">{{ alert.title }}</div>
+                        <p style="margin-top:0;">{{ alert.message }}</p>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                </div>
+            {% endif %}
 
-        <div class="panel">
-            <h2>Recent Orders</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Order</th>
-                        <th>Customer</th>
-                        <th>Item</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in recent_orders %}
+            {% if dashboard_metrics %}
+                <div class="panel">
+                    <h3>Key Metrics</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Value</th>
+                                <th>Label</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for metric in dashboard_metrics %}
+                                <tr>
+                                    <td>{{ metric.name }}</td>
+                                    <td>{{ metric.value }}</td>
+                                    <td>{{ metric.label }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            <div class="panel">
+                <h3>Recent M-Pesa Transactions</h3>
+                <table>
+                    <thead>
                         <tr>
-                            <td>{{ order.id }}</td>
-                            <td>{{ order.customer }}</td>
-                            <td>{{ order.item }}</td>
-                            <td>KSh {{ order.amount }}</td>
-                            <td>{{ order.status }}</td>
+                            <th>Phone</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Created</th>
                         </tr>
-                    {% empty %}
+                    </thead>
+                    <tbody>
+                        {% for transaction in recent_transactions %}
+                            <tr>
+                                <td>{{ transaction.phone_number }}</td>
+                                <td>KSh {{ transaction.amount }}</td>
+                                <td>
+                                    {% if transaction.status == 'success' %}
+                                        <span class="status success">Success</span>
+                                    {% elif transaction.status == 'pending' %}
+                                        <span class="status pending">Pending</span>
+                                    {% else %}
+                                        <span class="status failed">Failed</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ transaction.created_at|date:"Y-m-d H:i" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No transactions yet.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel">
+                <h3>Recent Orders</h3>
+                <table>
+                    <thead>
                         <tr>
-                            <td colspan="5">No recent orders.</td>
+                            <th>Order</th>
+                            <th>Customer</th>
+                            <th>Item</th>
+                            <th>Amount</th>
+                            <th>Status</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        {% for order in recent_orders %}
+                            <tr>
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.customer }}</td>
+                                <td>{{ order.item }}</td>
+                                <td>KSh {{ order.amount }}</td>
+                                <td>{{ order.status }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No recent orders.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
     </div>
 </body>
 </html>
