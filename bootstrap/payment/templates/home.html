@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-Pesa Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .checkout-card {
+            background: #fff;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 28px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #1c1c1c;
+            text-align: center;
+        }
+
+        .order-box {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        input, button {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        input {
+            border: 1px solid #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        button {
+            border: none;
+            background: #0ea5e9;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0284c7;
+        }
+
+        .status {
+            margin-top: 18px;
+            min-height: 24px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .success {
+            color: #15803d;
+        }
+
+        .error {
+            color: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-card">
+        <h2>Payment Checkout</h2>
+
+        <div class="order-box">
+            <strong>Order:</strong> Laptop Bag<br>
+            <strong>Total:</strong> KSh 2500
+        </div>
+
+        <form id="mpesaForm">
+            {% csrf_token %}
+            <label class="label" for="phone_number">Phone Number</label>
+            <input type="text" id="phone_number" name="phone_number" placeholder="e.g. 254712345678" required>
+
+            <label class="label" for="amount">Amount</label>
+            <input type="number" id="amount" name="amount" value="2500" min="1" required>
+
+            <button type="submit">Pay with M-Pesa</button>
+        </form>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('mpesaForm');
+        const statusBox = document.getElementById('status');
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const phoneNumber = document.getElementById('phone_number').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+
+            if (!phoneNumber || !amount) {
+                statusBox.textContent = 'Please fill in all required fields.';
+                statusBox.className = 'status error';
+                return;
+            }
+
+            statusBox.textContent = 'Processing payment...';
+            statusBox.className = 'status';
+
+            try {
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                const response = await fetch('/payment/stk-push/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phone_number: phoneNumber,
+                        amount: Number(amount),
+                        account_reference: 'Order-001',
+                        transaction_desc: 'Checkout payment'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || data.details || 'Payment request failed.');
+                }
+
+                statusBox.textContent = 'Payment request sent successfully. Check your phone to complete the transaction.';
+                statusBox.className = 'status success';
+                console.log('M-Pesa response:', data);
+            } catch (error) {
+                statusBox.textContent = error.message;
+                statusBox.className = 'status error';
+            }
+        });
+    </script>
+</body>
+</html>
