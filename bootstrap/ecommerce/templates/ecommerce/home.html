@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f8fafc;
+            color: #1f2937;
+        }
+
+        .topbar {
+            background: #111827;
+            color: #fff;
+            padding: 14px 30px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px 40px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            color: white;
+            padding: 60px 30px;
+            border-radius: 18px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            margin: 0 0 12px;
+            font-size: 40px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .product h3 {
+            margin-top: 0;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0f172a;
+            margin: 14px 0;
+        }
+
+        .button {
+            display: inline-block;
+            background: #0ea5e9;
+            color: white;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="nav">
+            <a href="/">Ecommerce</a>
+            <a href="/payment/">Payment</a>
+            <a href="/dashboard/">Dashboard</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Welcome to Our Store</h1>
+            <p>Shop smart and pay securely with M-Pesa.</p>
+        </div>
+
+        <div class="products">
+            <div class="product">
+                <h3>Laptop Bag</h3>
+                <p>Premium carry bag for business travel.</p>
+                <div class="price">KSh 2500</div>
+                <a class="button" href="/payment/">Buy Now</a>
+            </div>
+
+            <div class="product">
+                <h3>Wireless Mouse</h3>
+                <p>Comfortable and responsive for daily work.</p>
+                <div class="price">KSh 1500</div>
+                <a class="button" href="/payment/">Buy Now</a>
+            </div>
+
+            <div class="product">
+                <h3>Bluetooth Speaker</h3>
+                <p>Portable sound for meetings and home use.</p>
+                <div class="price">KSh 3200</div>
+                <a class="button" href="/payment/">Buy Now</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
