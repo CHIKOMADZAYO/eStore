@@ -49,7 +49,7 @@ def generate_mpesa_password(shortcode, passkey, timestamp):
 
 
 def checkout_page(request):
-    return render(request, 'home.html')
+    return render(request, 'payment/checkout.html')
 
 
 @require_http_methods(['GET', 'POST'])
